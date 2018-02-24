@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mailgun Contact Form</title>
+  <style>
+  body {
+    margin-bottom: 3rem;
+    line-height: 1.5;
+  }
+  form {
+    max-width: 20rem;
+  }
+  label {
+    font-weight: bold;
+  }
+  input,
+  textarea {
+    display: block;
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0.3em;
+  }
+  textarea {
+    min-height: 3em;
+  }
+  </style>
+</head>
+<body>
+  <h1>Mailgun Contact Form</h1>
+
+  <form id="contact" action="./send-message.php" method="POST">
+    <label for="contact-name">Your Name</label>
+    <input id="contact-name" type="text" name="name" required>
+
+    <label for="contact-from">Your Email</label>
+    <input id="contact-from" type="email" name="from" required>
+
+    <label for="contact-subject">Subject</label>
+    <input id="contact-subject" type="text" name="subject" required>
+
+    <label for="contact-message">Message</label>
+    <textarea id="contact-message" name="message" required></textarea>
+
+    <button type="submit">Send</button>
+  </form>
+
+  <div id="contactResult" style="margin-top: 1rem;"></div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script>
+  contact.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    $.post(this.action, {
+      name: contact.querySelector('[name="name"]').value,
+      from: contact.querySelector('[name="from"]').value,
+      subject: contact.querySelector('[name="subject"]').value,
+      message: contact.querySelector('[name="message"]').value
+    })
+    .then(function(data, textStatus, jqXHR) {
+      console.log('✅ Success: ', data, textStatus, jqXHR);
+      contactResult.innerHTML = data;
+      contactResult.style.color = '';
+    })
+    .catch(function(jqXHR, textStatus, errorThrown) {
+      console.log('❌ Error: ', jqXHR, textStatus, errorThrown);
+      contactResult.innerHTML = '😢 ' + errorThrown;
+      contactResult.style.color = 'red';
+    });
+  });
+  </script>
+</body>
+</html>
