@@ -19,12 +19,13 @@ $dotenv->required([
   'CONTACT_FROM',
   'CONTACT_SUBJECT',
   'CONTACT_SUCCESS_MESSAGE',
+  'MAILGUN_DOMAIN',
   'MAILGUN_API_KEY'
 ]);
 
 $mg = Mailgun::create(getenv('MAILGUN_API_KEY'));
 
-$response = $mg->messages()->send('tannerhodges.com', [
+$response = $mg->messages()->send(getenv('MAILGUN_DOMAIN'), [
   'from'    => $_POST['name'] . ' <' . getenv('CONTACT_FROM') . '>',
   'to'      => getenv('CONTACT_TO'),
   'subject' => getenv('CONTACT_SUBJECT') . ': "' . $_POST['subject'] . '"',
